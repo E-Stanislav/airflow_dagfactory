@@ -1,0 +1,10 @@
+{
+    "dag_id": "Load_Postgres_users2",
+    "description": "Simple dag",
+    "schedule_interval": "@yearly",
+    "owner_links": {"efimov": "https://github.com/E-Stanislav"},
+    "default_args": {
+        "owner": "efimov",
+        "start_date": "2022-01-01"
+    }
+}
