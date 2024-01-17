@@ -5,5 +5,9 @@
     "owner_links": {"efimov": "https://github.com/E-Stanislav"},
     "default_args": {
         "start_date": "2022-01-01"
-    }
+    },
+    "tasks": [
+            "task1",
+            "task2"
+        ]
 }
