@@ -1,4 +1,5 @@
 {
     "task_name": "task1",
-    "operator_type": "DummyOperator"
+    "operator_type": "DummyOperator",
+    "depends_on": ["task4"]
 }
