@@ -11,7 +11,6 @@ dag_folder = os.path.join(base_dir, "dags", "dag_meta")
 task_folder = os.path.join(base_dir, "dags", "task_meta")
 
 list_dags = os.listdir(dag_folder)
-# list_tasks = os.listdir(task_folder)
 
 
 def read_meta(path: str) -> dict:
@@ -19,12 +18,37 @@ def read_meta(path: str) -> dict:
         return json.loads(f.read())
 
 
-def make_task(dag, task: str):
-    task_meta = read_meta(f"{task_folder}/{task}.json")
+def make_task(dag, tasks: list):
+    # Dictionary for storing operators
+    operators = {}
 
-    operator_type = task_meta["operator_type"]
-    if operator_type == "DummyOperator":
-        return DummyOperator(task_id=task_meta["task_name"], dag=dag)
+    for task in tasks:
+        task_meta = read_meta(f"{task_folder}/{task}.json")
+
+        operator_type = task_meta["operator_type"]
+        depends_on = task_meta.get("depends_on")
+
+        if operator_type == "DummyOperator":
+            operators[task_meta["task_name"]] = {
+                "dag_id": DummyOperator(
+                    task_id=task_meta["task_name"], dag=dag
+                ),
+                "depends_on": depends_on,
+            }
+
+    return operators
+
+
+def set_depends(operators: dict) -> None:
+    
+    for operator_name, operator_content in operators.items():
+        if not operator_content["depends_on"] is None:
+            for depend_task in operator_content["depends_on"]:
+                operators[depend_task]["dag_id"] >> operator_content["dag_id"]
+
+            
+            
+
 
 
 def make_dag(dag_path: str):
@@ -38,8 +62,8 @@ def make_dag(dag_path: str):
         owner_links={"airflow": "https://airflow.apache.org"},
     )
     tasks = meta_dag["tasks"]
-    for task in tasks:
-        make_task(dag=dag, task=task)
+    operators = make_task(dag=dag, tasks=tasks)
+    set_depends(operators=operators)
 
     return dag
 
