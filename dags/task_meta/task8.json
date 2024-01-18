@@ -1,0 +1,6 @@
+{
+    "task_name": "task8",
+    "operator_type": "SleepOperator",
+    "time_sleep": 7,
+    "depends_on": ["task4", "task5"]
+}
