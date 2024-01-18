@@ -5,8 +5,11 @@
     "owner_links": {"efimov": "https://github.com/E-Stanislav"},
     "default_args": {
         "owner": "efimov",
-        "start_date": "2022-01-01"
+        "start_date": "2022-01-01",
+        "depends_on_past": false,
+        "max_active_runs": 1
     },
+    "tags": ["Storage", "Worker"],
     "tasks": [
             "task3",
             "task6",

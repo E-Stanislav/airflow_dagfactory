@@ -4,13 +4,16 @@
     "schedule_interval": "0 0 * * *",
     "owner_links": {"efimov": "https://github.com/E-Stanislav"},
     "default_args": {
-        "start_date": "2022-01-01"
+        "start_date": "2022-01-01",
+        "depends_on_past": false,
+        "max_active_runs": 1
     },
     "tasks": [
             "task1",
             "task2",
             "task3",
             "task4",
-            "task5"
+            "task5",
+            "task8"
         ]
 }

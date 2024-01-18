@@ -120,8 +120,12 @@ def make_dag(dag_path: str) -> DAG:
         default_args=meta_dag["default_args"],
         description=meta_dag["description"],
         schedule_interval=meta_dag["schedule_interval"],
-        owner_links={"airflow": "https://airflow.apache.org"},
+        tags=meta_dag.get("tags"),
+        catchup=meta_dag.get("catchup", False),
     )
+    dag.doc_md = f"""Автогенерируемый даг [{meta_dag["dag_id"]}](https://airflow.apache.org/) \n
+    
+    Dag owner: {meta_dag["default_args"].get("owner", "airflow").capitalize()}"""
     tasks = meta_dag["tasks"]
     operators = make_task(dag=dag, tasks=tasks)
     set_depends(operators=operators)
