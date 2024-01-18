@@ -1,0 +1,6 @@
+{
+    "task_name": "task6",
+    "operator_type": "PrintOperator",
+    "my_argument": "Это не таска",
+    "depends_on": ["task7", "task3"]
+}

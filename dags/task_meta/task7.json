@@ -1,0 +1,5 @@
+{
+    "task_name": "task7",
+    "operator_type": "SleepOperator",
+    "time_sleep": 7
+}
