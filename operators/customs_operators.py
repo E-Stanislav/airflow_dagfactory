@@ -6,6 +6,7 @@ from airflow.utils.decorators import apply_defaults
 
 
 class PrintOperator(BaseOperator):
+    ui_color = "#ff66ff"
     @apply_defaults
     def __init__(self, my_argument, *args, **kwargs):
         super(PrintOperator, self).__init__(*args, **kwargs)
@@ -19,6 +20,7 @@ class PrintOperator(BaseOperator):
 
 
 class SleepOperator(BaseOperator):
+    ui_color = "#00cccc"
     @apply_defaults
     def __init__(self, time_sleep, *args, **kwargs):
         super(SleepOperator, self).__init__(*args, **kwargs)
