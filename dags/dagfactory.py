@@ -1,12 +1,15 @@
 import json
 import os
+import sys
 import traceback
 
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.helpers import chain
 
-base_dir = "/opt/airflow"
+base_dir = os.environ.get("AIRFLOW_HOME")
+sys.path.append(base_dir)
+from operators.customs_operators import PrintOperator, SleepOperator
 
 dag_folder = os.path.join(base_dir, "dags", "dag_meta")
 task_folder = os.path.join(base_dir, "dags", "task_meta")
@@ -53,6 +56,32 @@ def make_task(dag: DAG, tasks: list) -> dict:
                 "depends_on": depends_on,
             }
 
+        elif operator_type == "PrintOperator":
+            my_argument = task_meta["my_argument"]
+
+            operators[task_meta["task_name"]] = {
+                "dag_id": PrintOperator(
+                    task_id=task_meta["task_name"],
+                    my_argument=my_argument,
+                    dag=dag,
+                ),
+                "depends_on": depends_on,
+            }
+
+        elif operator_type == "SleepOperator":
+            time_sleep = task_meta["time_sleep"]
+
+            operators[task_meta["task_name"]] = {
+                "dag_id": SleepOperator(
+                    task_id=task_meta["task_name"],
+                    time_sleep=time_sleep,
+                    dag=dag,
+                ),
+                "depends_on": depends_on,
+            }
+        else:
+            raise TypeError("Нет такого оператора")
+
     return operators
 
 
@@ -70,9 +99,7 @@ def set_depends(operators: dict) -> None:
                         operators[depend_task]["dag_id"],
                         operator_content["dag_id"],
                     )
-    except KeyError:
-        pass
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
 
 
